@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@mipmap/ic_home_black_24dp"
+            android:title="Početna" />
+        <item
+            android:id="@+id/nav_task"
+            android:icon="@mipmap/ic_drive_eta_black_24dp"
+            android:title="Transporti" />
+
+    </group>
+
+    <item android:title="Korisnički podaci">
+        <menu>
+            <item
+                android:id="@+id/nav_user"
+                android:icon="@mipmap/ic_account_circle_black_24dp"
+                android:title="Korisnik" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@mipmap/ic_exit_to_app_black_24dp"
+                android:title="Odjava" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@mipmap/ic_close_black_24dp"
+                android:title="Izadji" />
+        </menu>
+    </item>
+
+</menu>
