@@ -101,4 +101,5 @@
     <string name="title_activity_logovanje">Logovanje</string>
     <string name="title_activity_task_prevozi">Moji transporti</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_task_detail">Izmjeni Status</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.mt.menitest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by mladen.todorovic on 20.09.2017..
  */
 
-public class Task {
+public class Task implements Serializable {
 
 
     private int IdTask;

@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, TaskPrevozi.class);
             startActivity(intent);
         } else if (id == R.id.nav_task) {
-            Intent intent = new Intent(this, Prevozi.class);
+            Intent intent = new Intent(this, TaskPrevozi.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_user) {

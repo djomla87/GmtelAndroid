@@ -41,6 +41,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mt.menitest.MainActivity" />
         </activity>
+        <activity
+            android:name=".TaskDetail"
+            android:label="@string/title_activity_task_detail"
+            android:parentActivityName=".TaskPrevozi"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mt.menitest.TaskPrevozi" />
+        </activity>
     </application>
 
 </manifest>

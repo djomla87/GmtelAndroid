@@ -1,6 +1,7 @@
 package com.example.mt.menitest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -71,7 +72,7 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
         super.onCreateContextMenu(menu, v, menuInfo);
 
         MenuInflater mi = this.getActivity().getMenuInflater();
-        mi.inflate(R.menu.task_menu, menu);
+        mi.inflate(R.menu.task_menu_prevoz, menu);
 
         menu.setHeaderTitle("Postavi status prevoza");
 
@@ -82,25 +83,37 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         int index = info.position;
-        int IdTask = mTaskMapList.get(index).getIdTask();
+      //  int IdTask = 555; TaskMapList.get(index).getIdTask();
 
         switch (item.getItemId()) {
-            case R.id.menu_utovar: {
+            case R.id.menu_utovar2: {
 
-                Toast.makeText(getActivity(), "menu_utovar !" + IdTask, Toast.LENGTH_SHORT).show();
-               // mTaskMapList.get(index).setStatus("DJOMLA STATUS");
-                return true;
+                Intent detalji = new Intent(getActivity(), TaskDetail.class);
+                Task clickedTask = mTaskMapList.get(index);
+                detalji.putExtra("task", clickedTask);
+                detalji.putExtra("status","Nije utovareno");
+                this.startActivity(detalji);
+                break;
             }
-            case R.id.menu_transport: {
-                Toast.makeText(getActivity(), "menu_transport !" + IdTask, Toast.LENGTH_SHORT).show();
-                return true;
+            case R.id.menu_transport2: {
+                Intent detalji = new Intent(getActivity(), TaskDetail.class);
+                Task clickedTask = mTaskMapList.get(index);
+                detalji.putExtra("task", clickedTask);
+                detalji.putExtra("status","U transportu");
+                this.startActivity(detalji);
+                break;
             }
-            case R.id.menu_istovar: {
-                Toast.makeText(getActivity(), "menu_istovar !" + IdTask, Toast.LENGTH_SHORT).show();
-                return true;
+            case R.id.menu_istovar2: {
+                Intent detalji = new Intent(getActivity(), TaskDetail.class);
+                Task clickedTask = mTaskMapList.get(index);
+                detalji.putExtra("task", clickedTask);
+                detalji.putExtra("status","Dostavljeno");
+                this.startActivity(detalji);
+                break;
             }default:
                 return super.onContextItemSelected(item);
         }
+        return true;
     }
 
     @Override

@@ -138,7 +138,7 @@ public class TaskPrevozi extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "NEUTOVARENO";
+                    return "UTOVAR";
                 case 1:
                     return "TRANSPORT";
                 case 2:
