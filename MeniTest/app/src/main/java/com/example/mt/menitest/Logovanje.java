@@ -24,7 +24,7 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
         setContentView(R.layout.activity_logovanje);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+/*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,7 +33,7 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
                         .setAction("Action", null).show();
             }
         });
-
+*/
     }
 
     public void onLoginButtonClick(View view)

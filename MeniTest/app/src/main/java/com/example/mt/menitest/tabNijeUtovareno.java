@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class tabNijeUtovareno extends Fragment implements LoadJSONTask.Listener,
     private tabNijeUtovareno.customAdapter adapter;
     private ListView lvTaskovi;
     private List<Task> mTaskMapList = new ArrayList<>();
+    private ProgressBar bar = null;
 
     public tabNijeUtovareno(){
 
@@ -46,6 +48,9 @@ public class tabNijeUtovareno extends Fragment implements LoadJSONTask.Listener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tab_nije_utovareno, container, false);
+
+        bar = (ProgressBar) rootView.findViewById(R.id.progresbar2);
+        bar.setVisibility(View.VISIBLE);
 
         lvTaskovi = (ListView)rootView.findViewById(R.id.ListViewNijeUtovareno);
         lvTaskovi.setOnItemClickListener(this);
@@ -145,6 +150,8 @@ public class tabNijeUtovareno extends Fragment implements LoadJSONTask.Listener,
         }
 
         loadListView();
+
+        bar.setVisibility(View.INVISIBLE);
     }
 
 
