@@ -1,17 +1,25 @@
  package com.example.mt.menitest;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
- public class TaskDetail extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.Listener {
 
     private Task task;
+     private String Status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +40,53 @@ import android.widget.Toast;
 
 
        task = (Task)getIntent().getSerializableExtra("task");
-       String status = getIntent().getExtras().getString("status");
+        Status = getIntent().getExtras().getString("status");
 
 
         TextView text = (TextView)findViewById(R.id.TaskPromjenaStatusa);
-        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + status + " ?");
+        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + Status + " ?");
     }
 
 
     public void bntZavrsi(View view)
     {
-        Toast.makeText(this, "" + task.getIdTask(), Toast.LENGTH_SHORT).show();
 
+        SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
+        String token = preferences.getString("Token", "");
 
+        CheckBox cb = (CheckBox)findViewById(R.id.sendEmail);
+        int mail = cb.isChecked() ? 1 : 0;
+
+        new LoadJsonObject(this).execute("http://gmtel-office.com/DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail);
     }
 
-}
+     @Override
+     public void onLoaded(JSONObject obj) {
+
+         String response = null;
+         String message = null;
+
+         try {
+             response = obj.getString("response");
+             message = obj.getString("message");
+         } catch (JSONException e) {
+             e.printStackTrace();
+         }
+         if (response.equals("OK")) {
+             Toast.makeText(this, "Status uspješno ažuriran", Toast.LENGTH_SHORT).show();
+             Intent i = new Intent(this, TaskPrevozi.class);
+             this.startActivity(i);
+         }
+         else {
+             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+         }
+
+
+     }
+
+     @Override
+     public void onError() {
+
+         Toast.makeText(this, "Greska", Toast.LENGTH_SHORT).show();
+     }
+ }

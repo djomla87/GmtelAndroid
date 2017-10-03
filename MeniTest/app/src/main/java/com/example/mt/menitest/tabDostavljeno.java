@@ -87,7 +87,7 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
                 Intent detalji = new Intent(getActivity(), TaskDetail.class);
                 Task clickedTask = mTaskMapList.get(index);
                 detalji.putExtra("task", clickedTask);
-                detalji.putExtra("status","Nije utovareno");
+                detalji.putExtra("status","Nije_utovareno");
                 this.startActivity(detalji);
                 break;
             }
@@ -95,7 +95,7 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
                 Intent detalji = new Intent(getActivity(), TaskDetail.class);
                 Task clickedTask = mTaskMapList.get(index);
                 detalji.putExtra("task", clickedTask);
-                detalji.putExtra("status","U transportu");
+                detalji.putExtra("status","U_transportu");
                 this.startActivity(detalji);
                 break;
             }
