@@ -60,7 +60,7 @@ import org.json.JSONObject;
         CheckBox cb = (CheckBox)findViewById(R.id.sendEmail);
         int mail = cb.isChecked() ? 1 : 0;
 
-        new LoadJsonObject(this).execute("http://gmtel-office.com/DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail);
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail);
     }
 
      @Override

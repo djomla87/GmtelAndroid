@@ -1,12 +1,17 @@
 package com.example.mt.menitest;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,18 +22,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTask.Listener {
+
+
+
+    private List<Task> mTaskMapList = new ArrayList<>();
+    private NotificationCompat.Builder notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        notification = new NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,6 +81,25 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+        try {
+            Task task = (Task) getIntent().getSerializableExtra("task");
+
+            if (task != null)
+            {
+                Intent intent = new Intent(this, TaskPrevozi.class);
+                startActivity(intent);
+            }
+        }
+        catch ( Exception e ){}
+
+        String token = preferences.getString("Token", "");
+
+
+      //  new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NoviTaskovi?token="+ token);
+        int radi = BackgroundService.getStarted();
+
+        if (radi != 1)
+        startService(new Intent(this, BackgroundService.class));
 
 
         // new DbUserData().execute("http://gmtel-office.com/api/Login?username=mario.kuzmanovic&password=admin");
@@ -77,6 +111,67 @@ public class MainActivity extends AppCompatActivity
         */
 
     }
+
+
+    @Override
+    public void onLoaded(JSONArray arr){
+
+        mTaskMapList.clear();
+
+        for (int i =0; i<arr.length(); i++)
+        {
+            try {
+                int     IdTask          = arr.getJSONObject(i).getInt("IdTask");
+                String SerijskiBroj     = arr.getJSONObject(i).getString("SerijskiBroj");
+                String Vozilo           = arr.getJSONObject(i).getString("Vozilo");
+                String Istovar          = arr.getJSONObject(i).getString("Istovar");
+                String Roba             = arr.getJSONObject(i).getString("Roba");
+                String Status           = arr.getJSONObject(i).getString("Status");
+                String DatumAzuriranja  = arr.getJSONObject(i).getString("DatumAzuriranja");
+                String Utovar           = arr.getJSONObject(i).getString("Utovar");
+                String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
+                String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
+                String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
+                String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
+                String Napomena = arr.getJSONObject(i).getString("Napomena");
+                String RefBroj = arr.getJSONObject(i).getString("RefBroj");
+                String Pregledano = arr.getJSONObject(i).getString("Pregledano");
+
+                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        for (int i=0; i< mTaskMapList.size(); i++ )
+        {
+
+            notification.setSmallIcon(R.drawable.ic_launcher);
+            notification.setTicker("This is a ticker");
+            notification.setWhen(System.currentTimeMillis());
+            notification.setContentTitle("Prevoz " + mTaskMapList.get(i).getSerijskiBroj());
+            notification.setContentText("Utovar " + mTaskMapList.get(i).getUtovar());
+
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntet = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.setContentIntent(pendingIntet);
+
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(mTaskMapList.get(i).getIdTask(), notification.build());
+
+        }
+
+
+    }
+
+    @Override
+    public void onError(){}
+
 
     @Override
     public void onBackPressed() {
@@ -132,6 +227,7 @@ public class MainActivity extends AppCompatActivity
             preferences.edit().remove("Token").commit();
 
             Intent intent = new Intent(this, MainActivity.class);
+            stopService(new Intent(this, BackgroundService.class));
             startActivity(intent);
 
         } else if (id == R.id.nav_exit) {

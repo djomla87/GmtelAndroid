@@ -1,5 +1,7 @@
 package com.example.mt.menitest;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,10 +21,14 @@ import android.view.ViewGroup;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.example.mt.menitest.R.id.container;
 
-public class TaskPrevozi extends AppCompatActivity {
+public class TaskPrevozi extends AppCompatActivity  implements LoadJsonObject.Listener  {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -58,6 +64,12 @@ public class TaskPrevozi extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+        SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
+        String token = preferences.getString("Token", "");
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=1&AdminVidio=0");
+
+
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +104,33 @@ public class TaskPrevozi extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onLoaded(JSONObject obj) {
+        String response = null;
+        String message = null;
+
+        try {
+            response = obj.getString("response");
+            message = obj.getString("message");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (response.equals("OK")) {
+            //  Toast.makeText(this, "Status uspješno ažuriran", Toast.LENGTH_SHORT).show();
+            //  Intent i = new Intent(this, TaskPrevozi.class);
+            //  this.startActivity(i);
+        }
+        else {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onError() {
+        Toast.makeText(this, "Greska", Toast.LENGTH_SHORT).show();
     }
 
     /**

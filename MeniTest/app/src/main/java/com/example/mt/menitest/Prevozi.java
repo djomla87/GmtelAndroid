@@ -49,7 +49,7 @@ public class Prevozi extends AppCompatActivity implements LoadJSONTask.Listener,
 
         registerForContextMenu(lvTaskovi);
 
-        new LoadJSONTask(this).execute("http://gmtel-office.com/api/Tasks?token="+token);
+        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "api/Tasks?token="+token);
 
     }
 
@@ -110,8 +110,17 @@ public class Prevozi extends AppCompatActivity implements LoadJSONTask.Listener,
                 String Status           = arr.getJSONObject(i).getString("Status");
                 String DatumAzuriranja  = arr.getJSONObject(i).getString("DatumAzuriranja");
                 String Utovar           = arr.getJSONObject(i).getString("Utovar");
+                String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
+                String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
+                String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
+                String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
+                String Napomena = arr.getJSONObject(i).getString("Napomena");
+                String RefBroj = arr.getJSONObject(i).getString("RefBroj");
+                String Pregledano = arr.getJSONObject(i).getString("Pregledano");
 
-                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar ));
+                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+
+
 
             } catch (JSONException e) {
                 e.printStackTrace();

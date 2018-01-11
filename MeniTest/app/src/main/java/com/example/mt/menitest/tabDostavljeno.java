@@ -55,7 +55,7 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
         SharedPreferences preferences =  this.getActivity().getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
 
-        new LoadJSONTask(this).execute("http://gmtel-office.com/api/Tasks?token="+token);
+        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "api/Tasks?token="+token);
 
 
         return rootView;
@@ -64,7 +64,22 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(),"Odabrani id je " + view.getTag(), Toast.LENGTH_SHORT).show();
+
+        //Toast.makeText(getActivity(),"Odabrani id je " + view.getTag(), Toast.LENGTH_SHORT).show();
+
+
+        Task clickedTask = mTaskMapList.get(position);
+
+        Intent detalji = new Intent(getActivity(), TaskDetalji.class);
+        detalji.putExtra("task", clickedTask);
+        this.startActivity(detalji);
+                /*
+                new Intent(getActivity(), TaskDetail.class);
+        detalji.putExtra("task", clickedTask);
+        detalji.putExtra("status","Nije_utovareno");
+        this.startActivity(detalji);
+*/
+
     }
 
     @Override
@@ -132,9 +147,15 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
                 String Status           = arr.getJSONObject(i).getString("Status");
                 String DatumAzuriranja  = arr.getJSONObject(i).getString("DatumAzuriranja");
                 String Utovar           = arr.getJSONObject(i).getString("Utovar");
-
+                String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
+                String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
+                String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
+                String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
+                String Napomena = arr.getJSONObject(i).getString("Napomena");
+                String RefBroj = arr.getJSONObject(i).getString("RefBroj");
+                String Pregledano = arr.getJSONObject(i).getString("Pregledano");
                 if(Status.contains("ISTOVARENO"))
-                    mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar ));
+                    mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano ));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -192,22 +213,29 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
-            View v = View.inflate(mContext,R.layout.list_view_item,null);
+            //View v = View.inflate(mContext,R.layout.list_view_item,null);
+
+            View v = View.inflate(mContext,R.layout.list_view_item_small,null);
+
             TextView SerijskiBroj = (TextView)v.findViewById(R.id.SerijskiBroj);
-            TextView Vozilo = (TextView)v.findViewById(R.id.Vozilo);
+           // TextView Vozilo = (TextView)v.findViewById(R.id.Vozilo);
             TextView Istovar = (TextView)v.findViewById(R.id.Istovar);
             TextView Status = (TextView)v.findViewById(R.id.Status);
-            TextView Roba = (TextView)v.findViewById(R.id.Roba);
-            TextView DatumAzuriranja = (TextView)v.findViewById(R.id.DatumAzuriranja);
+         //   TextView Roba = (TextView)v.findViewById(R.id.Roba);
+          //  TextView DatumAzuriranja = (TextView)v.findViewById(R.id.DatumAzuriranja);
             TextView Utovar = (TextView)v.findViewById(R.id.Utovar);
 
+
             SerijskiBroj.setText(mTaskList.get(position).getSerijskiBroj());
-            Vozilo.setText(mTaskList.get(position).getVozilo());
+        //    Vozilo.setText(mTaskList.get(position).getVozilo());
             Istovar.setText(mTaskList.get(position).getIstovar());
             Status.setText(mTaskList.get(position).getStatus());
-            Roba.setText(mTaskList.get(position).getRoba());
-            DatumAzuriranja.setText(mTaskList.get(position).getDatumAzuriranja());
+        //    Roba.setText(mTaskList.get(position).getRoba());
+         //   DatumAzuriranja.setText(mTaskList.get(position).getDatumAzuriranja());
             Utovar.setText(mTaskList.get(position).getUtovar());
+
+            if (mTaskList.get(position).getPregledano().equals("0"))
+                SerijskiBroj.setTextColor(getResources().getColor(R.color.colorAccent));
 
             v.setTag(mTaskList.get(position).getIdTask());
 

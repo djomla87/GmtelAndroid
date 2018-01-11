@@ -50,6 +50,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mt.menitest.TaskPrevozi" />
         </activity>
+
+        <service
+            android:name=".BackgroundService"
+            android:exported="false"></service>
+
+        <activity
+            android:name=".TaskDetalji"
+            android:label="@string/title_activity_task_detalji"
+            android:parentActivityName=".TaskPrevozi"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mt.menitest.TaskPrevozi" />
+        </activity>
     </application>
 
 </manifest>

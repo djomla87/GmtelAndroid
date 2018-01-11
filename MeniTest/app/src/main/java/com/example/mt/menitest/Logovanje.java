@@ -41,7 +41,7 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
         EditText Username = (EditText) findViewById(R.id.Username);
         EditText Lozinka = (EditText) findViewById(R.id.Password);
 
-        new LoadJsonObject(this).execute("http://gmtel-office.com/api/Login?username="+Username.getText()+"&password="+Lozinka.getText());
+        new LoadJsonObject(this).execute( getResources().getString(R.string.ProdukcijaSajt) + "api/Login?username="+Username.getText()+"&password="+Lozinka.getText());   //http://gmtel-office.com/
     }
 
     @Override
@@ -52,7 +52,10 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
 
             if (result.getString("Korisnik").equals("") || result.getString("Korisnik") == null || result.getString("Korisnik").equals("null") )
                 Toast.makeText(this, "Pogrešno korisničko ime ili lozinka", Toast.LENGTH_LONG).show();
-            else {
+
+            else
+                {
+
                 SharedPreferences preferences = getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
                 preferences.edit().putString("Korisnik", result.getString("Korisnik")).commit();
                 preferences.edit().putString("Token", result.getString("Code")).commit();
