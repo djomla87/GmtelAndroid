@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
@@ -119,26 +120,37 @@ public class BackgroundService extends Service implements LoadJSONTask.Listener 
 
         for (int i=0; i< mTaskMapList.size(); i++ )
         {
-
-            Intent intent = new Intent(this, TaskPrevozi.class );   //TaskPrevozi.class
-           // intent.putExtra("task", mTaskMapList.get(i));
-            PendingIntent pendingIntet =  PendingIntent.getActivity( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-            notification.setSmallIcon(R.drawable.ic_launcher);
-            notification.setTicker("This is a ticker");
-            notification.setWhen(System.currentTimeMillis());
-            notification.setContentTitle("Prevoz " + mTaskMapList.get(i).getSerijskiBroj());
-            notification.setContentText("Utovar " + mTaskMapList.get(i).getUtovar());
-            notification.setDefaults(Notification.DEFAULT_SOUND);
-            notification.setContentIntent(pendingIntet);
-
+            boolean postiji = false;
 
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(mTaskMapList.get(i).getIdTask(), notification.build());
+            StatusBarNotification[] notifications = nm.getActiveNotifications();
+            for (StatusBarNotification notification : notifications) {
+                if (notification.getId() == mTaskMapList.get(i).getIdTask()) {
+                    postiji = true;
+                }
+            }
+
+            if(!postiji) {
+
+                Intent intent = new Intent(this, TaskDetalji.class);   //TaskPrevozi.class
+                intent.putExtra("task", mTaskMapList.get(i));
+                PendingIntent pendingIntet = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                notification.setSmallIcon(R.drawable.ic_launcher);
+                notification.setTicker("This is a ticker");
+                notification.setWhen(System.currentTimeMillis());
+                notification.setContentTitle("Prevoz " + mTaskMapList.get(i).getSerijskiBroj());
+                notification.setContentText("Utovar " + mTaskMapList.get(i).getUtovar());
+                notification.setDefaults(Notification.DEFAULT_SOUND);
+                notification.setContentIntent(pendingIntet);
+
+                nm.notify(mTaskMapList.get(i).getIdTask(), notification.build());
+            }
 
         }
     }
+
+
 
     @Override
     public void onError() {

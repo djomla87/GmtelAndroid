@@ -55,7 +55,7 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
         DatumAzuriranja.setText(task.getDatumAzuriranja());
         Utovar.setText(task.getUtovar());
         UvoznaSpedicija.setText(task.getUvoznaSpedicija());
-        IzvoznaSpedicija.setText(task.getUvoznaSpedicija());
+        IzvoznaSpedicija.setText(task.getIzvoznaSpedicija());
         Uvoznik.setText(task.getUvoznik());
         Izvoznik.setText(task.getIzvoznik());
         Napomena.setText(task.getNapomena());
@@ -63,6 +63,11 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
 
         SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
+        String rola = preferences.getString("Rola", "");
+
+        if (rola.equals("admin"))
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=0&AdminVidio=1");
+        else
         new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=1&AdminVidio=0");
 
     }

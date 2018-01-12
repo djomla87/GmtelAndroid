@@ -67,8 +67,12 @@ public class TaskPrevozi extends AppCompatActivity  implements LoadJsonObject.Li
 
         SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=1&AdminVidio=0");
+        String rola = preferences.getString("Rola", "");
 
+        if (rola.equals("admin"))
+            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=0&AdminVidio=1");
+        else
+            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/AndroidTaskSeen?token="+token+"&VozacVidio=1&AdminVidio=0");
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

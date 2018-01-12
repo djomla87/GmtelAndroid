@@ -59,6 +59,7 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
                 SharedPreferences preferences = getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
                 preferences.edit().putString("Korisnik", result.getString("Korisnik")).commit();
                 preferences.edit().putString("Token", result.getString("Code")).commit();
+                preferences.edit().putString("Rola", result.getString("Rola")).commit();
 
                 EditText Username = (EditText) findViewById(R.id.Username);
                 EditText Lozinka = (EditText) findViewById(R.id.Password);

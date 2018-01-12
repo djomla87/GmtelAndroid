@@ -1,16 +1,22 @@
 package com.example.mt.menitest;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -21,6 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +38,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTask.Listener {
-
 
 
     private List<Task> mTaskMapList = new ArrayList<>();
@@ -69,46 +75,37 @@ public class MainActivity extends AppCompatActivity
 
 
         SharedPreferences preferences = getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
-        if ( preferences.getString("Korisnik","").equals(""))
-        {
+        if (preferences.getString("Korisnik", "").equals("")) {
             Intent intent = new Intent(this, Logovanje.class);
             startActivity(intent);
-        }
-        else
-        {
+        } else {
             NavigationView n = (NavigationView) findViewById(R.id.nav_view);
-            n.getMenu().findItem(R.id.nav_user).setTitle(preferences.getString("Korisnik",""));
+            n.getMenu().findItem(R.id.nav_user).setTitle(preferences.getString("Korisnik", ""));
         }
 
 
         try {
             Task task = (Task) getIntent().getSerializableExtra("task");
 
-            if (task != null)
-            {
+            if (task != null) {
                 Intent intent = new Intent(this, TaskPrevozi.class);
                 startActivity(intent);
             }
+        } catch (Exception e) {
         }
-        catch ( Exception e ){}
 
         String token = preferences.getString("Token", "");
 
 
-      //  new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NoviTaskovi?token="+ token);
+        //  new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NoviTaskovi?token="+ token);
         int radi = BackgroundService.getStarted();
 
         if (radi != 1)
-        startService(new Intent(this, BackgroundService.class));
+            startService(new Intent(this, BackgroundService.class));
+        
+        // instantiate the location manager, note you will need to request permissions in your manifest
 
-
-        // new DbUserData().execute("http://gmtel-office.com/api/Login?username=mario.kuzmanovic&password=admin");
-
-        /*
-        SharedPreferences preferences = getSharedPreferences("com.blabla.yourapp", Context.MODE_PRIVATE);
-        preferences.edit().putString("session", <yoursessiontoken>).commit();
-        preferences.getString("session", "");
-        */
+        // get the last know location from your location manager.
 
     }
 
@@ -278,6 +275,7 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
 
 }
 

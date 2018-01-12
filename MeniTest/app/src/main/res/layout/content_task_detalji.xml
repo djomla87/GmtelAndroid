@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_gravity="center_horizontal"
     android:fillViewport="true">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -12,7 +19,7 @@
         android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="50dp"
+        android:paddingTop="60dp"
         android:visibility="visible">
 
 
@@ -232,7 +239,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="10sp"
             android:textStyle="bold" />
 
         <TextView
@@ -260,27 +267,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_red_light"
                 android:onClick="btnNijeUtovareno"
-                android:text="Nije utovareno" />
+                android:text="Nije utovareno"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/BtnUTransportu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_orange_dark"
                 android:onClick="btnUTransportu"
-                android:text="U Transportu" />
+                android:text="U Transportu"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/BtnDostavljeno"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@android:color/holo_green_dark"
                 android:onClick="btnDostavljeno"
-                android:text="Dostavljeno" />
+                android:text="Dostavljeno"
+                android:textSize="12sp" />
         </LinearLayout>
 
     </LinearLayout>
 
 </ScrollView>
 
+</RelativeLayout>
