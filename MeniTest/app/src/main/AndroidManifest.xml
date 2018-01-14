@@ -3,7 +3,10 @@
     package="com.example.mt.menitest">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
@@ -65,6 +68,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mt.menitest.TaskPrevozi" />
         </activity>
+
+
     </application>
 
 </manifest>
