@@ -16,7 +16,6 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.0"
@@ -54,7 +53,6 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_height="wrap_content" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,10 +1,13 @@
 package com.example.mt.menitest;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -106,10 +109,26 @@ public class MainActivity extends AppCompatActivity
 
         if (radi != 1)
             startService(new Intent(this, BackgroundService.class));
-        
-        // instantiate the location manager, note you will need to request permissions in your manifest
 
-        // get the last know location from your location manager.
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            // Build the alert dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("GPS nije aktivan");
+            builder.setMessage("Molimo vas da omogućite Lokaciju / GPS");
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    // Show location settings when the user acknowledges the alert dialog
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            });
+            Dialog alertDialog = builder.create();
+            alertDialog.setCanceledOnTouchOutside(false);
+            alertDialog.show();
+        }
 
     }
 
@@ -148,25 +167,14 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-
-        for (int i=0; i< mTaskMapList.size(); i++ )
+        if (mTaskMapList.size() > 0)
         {
+            Task findTask = mTaskMapList.get(0);
 
-            notification.setSmallIcon(R.drawable.ic_launcher);
-            notification.setTicker("This is a ticker");
-            notification.setWhen(System.currentTimeMillis());
-            notification.setContentTitle("Prevoz " + mTaskMapList.get(i).getSerijskiBroj());
-            notification.setContentText("Utovar " + mTaskMapList.get(i).getUtovar());
-
-            Intent intent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntet = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notification.setContentIntent(pendingIntet);
-
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(mTaskMapList.get(i).getIdTask(), notification.build());
-
+            Intent detalji = new Intent(this, TaskDetalji.class);
+            detalji.putExtra("task", findTask);
+            this.startActivity(detalji);
         }
-
 
     }
 
@@ -266,7 +274,11 @@ public class MainActivity extends AppCompatActivity
 
             if (resultCode == RESULT_OK) {
                 String contents = data.getStringExtra("SCAN_RESULT");
-                Toast.makeText(this, contents , Toast.LENGTH_SHORT).show();
+                contents = contents.replace("www.gmtel-office.com/DnevnikPrevoza/GuestDetail?s=","");
+                //Toast.makeText(this, contents , Toast.LENGTH_SHORT).show();
+
+                new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/FindByGuestCode?code="+ contents);
+
             }
             if(resultCode == RESULT_CANCELED){
                // Toast.makeText(this, "greska" , Toast.LENGTH_SHORT).show();

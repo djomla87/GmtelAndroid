@@ -40,11 +40,18 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ActivityCompat.requestPermissions(TaskDetail.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        task = (Task)getIntent().getSerializableExtra("task");
+        Status = getIntent().getExtras().getString("status");
+
+        TextView text = (TextView)findViewById(R.id.TaskPromjenaStatusa);
+        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + Status + " ?");
+
+
+        ActivityCompat.requestPermissions(TaskDetail.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
         TVlokacija = (TextView) findViewById(R.id.textView4);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
 
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
@@ -64,6 +71,7 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
             alertDialog.show();
         }
 
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -74,37 +82,21 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
         Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
         Location location2 = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
 
-        if (location2 != null)
-        onLocationChanged(location);
-        else
-            onLocationChanged(location);
 
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-         */
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-       task = (Task)getIntent().getSerializableExtra("task");
-        Status = getIntent().getExtras().getString("status");
-
-
-        TextView text = (TextView)findViewById(R.id.TaskPromjenaStatusa);
-        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + Status + " ?");
     }
 
 
     public void bntZavrsi(View view)
     {
+
+        Location loc = VratiLokaciju();
+        String LAT = "";
+        String LONG = "";
+
+        if (loc != null) {
+            LAT = loc.getLatitude() + "";
+            LONG = loc.getLongitude() + "";
+        }
 
         SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
@@ -112,7 +104,7 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
         CheckBox cb = (CheckBox)findViewById(R.id.sendEmail);
         int mail = cb.isChecked() ? 1 : 0;
 
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail);
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail+"&LONG="+LONG+"&LAT="+LAT);
     }
 
      @Override
@@ -144,6 +136,47 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
 
          Toast.makeText(this, "Greska", Toast.LENGTH_SHORT).show();
      }
+
+
+     public Location VratiLokaciju()
+     {
+
+         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                 !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+             // Build the alert dialog
+             AlertDialog.Builder builder = new AlertDialog.Builder(this);
+             builder.setTitle("GPS nije aktivan");
+             builder.setMessage("Molimo vas da omogućite Lokaciju / GPS");
+             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialogInterface, int i) {
+                     // Show location settings when the user acknowledges the alert dialog
+                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                     startActivity(intent);
+                 }
+             });
+             Dialog alertDialog = builder.create();
+             alertDialog.setCanceledOnTouchOutside(false);
+             alertDialog.show();
+         }
+
+         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                 != PackageManager.PERMISSION_GRANTED
+                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                 != PackageManager.PERMISSION_GRANTED) {
+             return null;
+         }
+
+         Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+         Location location2 = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
+
+
+         if (location2 != null)
+             return location2;
+         else
+             return location;
+
+     }
+
 
      @Override
      public void onLocationChanged(Location location) {
