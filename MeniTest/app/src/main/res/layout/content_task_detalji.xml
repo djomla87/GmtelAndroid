@@ -40,6 +40,22 @@
             android:textColor="@android:color/black" />
 
         <TextView
+            android:id="@+id/PrevoznikLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Drugi Prevoznik"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Prevoznik"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+        <TextView
             android:id="@+id/VoziloLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,49 +72,16 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/IStovarLabel"
+            android:id="@+id/RefBrojLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Istovar"
+            android:text="Referentni Broj Utovara"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/Istovar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/RobaLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Roba"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/Roba"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/DAtumAzuriranjaLAbel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="18sp"
-            android:text="Datum Ažuriranja"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/DatumAzuriranja"
+            android:id="@+id/RefBroj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -121,21 +104,52 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/StatusLabel"
+            android:id="@+id/RobaLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Status"
+            android:text="Roba"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/Status"
+            android:id="@+id/Roba"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textColor="@android:color/black" />
 
+        <TextView
+            android:id="@+id/IzvoznaSpedicijaLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Izvozna Špedicija"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/IzvoznaSpedicija"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/IStovarLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Istovar"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Istovar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/UvoznaSpedicijaLabel"
@@ -154,16 +168,16 @@
             android:textColor="@android:color/black" />
 
         <TextView
-            android:id="@+id/IzvoznaSpedicijaLabel"
+            android:id="@+id/StatusLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Izvozna Špedicija"
+            android:text="Status"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/IzvoznaSpedicija"
+            android:id="@+id/Status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
@@ -202,6 +216,24 @@
             android:textColor="@android:color/black" />
 
         <TextView
+            android:id="@+id/DAtumAzuriranjaLAbel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="18sp"
+            android:text="Datum Ažuriranja"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/DatumAzuriranja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+
+        <TextView
             android:id="@+id/NapomenaLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -212,22 +244,6 @@
 
         <TextView
             android:id="@+id/Napomena"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="@android:color/black" />
-
-        <TextView
-            android:id="@+id/RefBrojLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Referentni Broj Utovara"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/RefBroj"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"

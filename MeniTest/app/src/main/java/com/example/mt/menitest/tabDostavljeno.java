@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -224,7 +226,7 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
          //   TextView Roba = (TextView)v.findViewById(R.id.Roba);
           //  TextView DatumAzuriranja = (TextView)v.findViewById(R.id.DatumAzuriranja);
             TextView Utovar = (TextView)v.findViewById(R.id.Utovar);
-
+            TextView Prevoznik = (TextView)v.findViewById(R.id.Prevoznik);
 
             SerijskiBroj.setText(mTaskList.get(position).getSerijskiBroj());
         //    Vozilo.setText(mTaskList.get(position).getVozilo());
@@ -234,8 +236,20 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
          //   DatumAzuriranja.setText(mTaskList.get(position).getDatumAzuriranja());
             Utovar.setText(mTaskList.get(position).getUtovar());
 
-            if (mTaskList.get(position).getPregledano().equals("0"))
-                SerijskiBroj.setTextColor(getResources().getColor(R.color.colorAccent));
+
+            if (mTaskList.get(position).getPregledano().equals(""))
+            {
+                Prevoznik.setVisibility(TextView.INVISIBLE);
+                TableRow row = (TableRow)v.findViewById(R.id.Red);
+                TableLayout tableLayout = (TableLayout)v.findViewById(R.id.Tabela);
+                tableLayout.removeView(row);
+            }
+            else
+            {
+                Prevoznik.setVisibility(TextView.VISIBLE);
+                Prevoznik.setText("*Drugi Prevoznik");
+                Prevoznik.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
 
             v.setTag(mTaskList.get(position).getIdTask());
 

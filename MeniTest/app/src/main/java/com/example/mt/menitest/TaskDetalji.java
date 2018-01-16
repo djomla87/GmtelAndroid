@@ -46,6 +46,18 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
         TextView Napomena = (TextView)findViewById(R.id.Napomena);
         TextView RefBroj = (TextView)findViewById(R.id.RefBroj);
 
+        TextView Prevoznik = (TextView)findViewById(R.id.Prevoznik);
+        TextView PrevoznikLabel = (TextView)findViewById(R.id.PrevoznikLabel);
+
+        if (task.getPregledano().equals(""))
+        {
+            Prevoznik.setVisibility(View.GONE);
+            PrevoznikLabel.setVisibility(View.GONE);
+        }
+        else
+        {
+            Prevoznik.setText(task.getPregledano());
+        }
 
         SerijskiBroj.setText(task.getSerijskiBroj());
         Vozilo.setText(task.getVozilo());
