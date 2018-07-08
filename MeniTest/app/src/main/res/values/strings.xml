@@ -105,4 +105,17 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_task_detail">Izmjeni Status</string>
     <string name="title_activity_task_detalji">Detalji prevoza</string>
+    <string name="title_activity_troskovi">TroskoviActivity</string>
+    <string name="title_activity_troskovi_novi">TroskoviNoviActivity</string>
+
+    <string-array name="VrsteTroskovaArr">
+        <item >Mercury</item>
+        <item >Venus</item>
+        <item>Earth</item>
+        <item>Mars</item>
+        <item>Jupiter</item>
+        <item>Saturn</item>
+        <item>Uranus</item>
+        <item>Neptune</item>
+    </string-array>
 </resources>

@@ -260,6 +260,9 @@ public class MainActivity extends AppCompatActivity
             moveTaskToBack(true);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
+        } else if (id == R.id.nav_trosak){
+            Intent intent = new Intent(this, TroskoviActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

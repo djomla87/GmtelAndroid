@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
@@ -57,7 +58,7 @@
 
         <service
             android:name=".BackgroundService"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".TaskDetalji"
@@ -68,8 +69,24 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mt.menitest.TaskPrevozi" />
         </activity>
-
-
+        <activity
+            android:name=".TroskoviActivity"
+            android:label="@string/title_activity_troskovi"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mt.menitest.MainActivity" />
+        </activity>
+        <activity
+            android:name=".TroskoviNoviActivity"
+            android:label="@string/title_activity_troskovi_novi"
+            android:parentActivityName=".TroskoviActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mt.menitest.TroskoviActivity" />
+        </activity>
     </application>
 
 </manifest>
