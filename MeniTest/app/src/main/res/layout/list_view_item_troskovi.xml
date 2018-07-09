@@ -50,8 +50,7 @@
 
 
                 <TextView
-                    android:id="@+id/IznosTroska"
-
+                    android:id="@+id/TipTroska"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -60,7 +59,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/DatumTroska"
+                    android:id="@+id/IznosTroska"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"
@@ -85,7 +84,7 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/TipTroska"
+                    android:id="@+id/DatumTroska"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="8"

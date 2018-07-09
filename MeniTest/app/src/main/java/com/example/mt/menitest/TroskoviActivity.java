@@ -8,7 +8,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -57,12 +60,13 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
             }
         });
 
+
         bar = (ProgressBar) findViewById(R.id.progresbar);
         bar.setVisibility(View.VISIBLE);
 
-
         lvTroskovi = (ListView)findViewById(R.id.ListViewTroskovi);
         lvTroskovi.setOnItemClickListener(this);
+        registerForContextMenu(lvTroskovi);
 
         mTroskoviMapList.clear();
         lvTroskovi.setAdapter(null);
@@ -81,13 +85,59 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Troskovi clickedTask = mTroskoviMapList.get(position);
 
-        Toast.makeText(this,"Odabrani id je " + view.getTag(), Toast.LENGTH_SHORT).show();
-        /*
-        Intent detalji = new Intent(this, TaskDetalji.class);
-        detalji.putExtra("task", clickedTask);
+        Intent detalji = new Intent(this, TroskoviNoviActivity.class);
+        detalji.putExtra("ObjTrosak", clickedTask);
         this.startActivity(detalji);
+
+
+        /*
+         Toast.makeText(this,"Odabrani id je " + view.getTag(), Toast.LENGTH_SHORT).show();
            */
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.troskovi_menu, menu);
+
+        menu.setHeaderTitle("Ažuriranje podataka");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        int index = info.position;
+        //   int IdTask = mTaskMapList.get(index).getIdTask();
+
+        switch (item.getItemId()) {
+            case R.id.menu_trosak_izmjeni: {
+
+                Intent detalji = new Intent(this, TroskoviNoviActivity.class);
+                Troskovi clickedTrosak = mTroskoviMapList.get(index);
+                detalji.putExtra("ObjTrosak", clickedTrosak);
+                this.startActivity(detalji);
+                break;
+            }
+            case R.id.menu_trosak_razmjeni: {
+
+                Intent detalji = new Intent(this, TroskoviRazmjenaAcitivty.class);
+                Troskovi clickedTrosak = mTroskoviMapList.get(index);
+                detalji.putExtra("ObjTrosak", clickedTrosak);
+                this.startActivity(detalji);
+                break;
+            }
+            default:
+                return super.onContextItemSelected(item);
+        }
+
+        return true;
+    }
+
+
 
     @Override
     public void onLoaded(JSONArray arr) {
@@ -100,7 +150,7 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
                 String Iznos     = arr.getJSONObject(i).getString("Iznos");
                 String Datum     = arr.getJSONObject(i).getString("Datum");
 
-                mTroskoviMapList.add(new Troskovi(Id, Vrsta, Tip, Iznos, Datum ));
+                mTroskoviMapList.add(new Troskovi(Id, Vrsta,Iznos, Datum, Tip  ));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -170,6 +220,11 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
             DatumTroska.setText(mTrosakList.get(position).getDatum());
             TipTroska.setText(mTrosakList.get(position).getTip());
             VrstaTroska.setText(mTrosakList.get(position).getVrsta());
+
+            if(mTrosakList.get(position).getTip().equals("RASHOD"))
+                TipTroska.setTextColor(getResources().getColor(R.color.colorAccent));
+            else
+                TipTroska.setTextColor(getResources().getColor(R.color.colorGreen));
 
             v.setTag(mTrosakList.get(position).getId());
 

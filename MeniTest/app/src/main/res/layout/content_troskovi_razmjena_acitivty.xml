@@ -6,36 +6,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.mt.menitest.TroskoviNoviActivity"
-    tools:showIn="@layout/activity_troskovi_novi">
+    tools:context="com.example.mt.menitest.TroskoviRazmjenaAcitivty"
+    tools:showIn="@layout/activity_troskovi_razmjena_acitivty"
+    android:weightSum="1">
 
 
-    <RadioGroup
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/editText16"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/radioGroup"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Podaci o razmjenjenoj valuti (iznos i valuta)"
+        android:layout_below="@+id/VrstaTroskaSppiner"
+        android:layout_alignStart="@+id/VrstaTroskaSppiner"
+        />
 
-        android:layout_alignParentTop="true">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+        <View android:id="@+id/strut1"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true"/>
 
-        <RadioButton
-            android:id="@+id/radioZaduzenje"
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:text="ZADUŽENJE" />
+            android:layout_alignRight="@id/strut1"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/Iznos1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="0dp"
+            android:inputType="numberDecimal" />
 
-        <RadioButton
-            android:id="@+id/radioRashod"
-            android:layout_width="wrap_content"
+        <Spinner
+            android:id="@+id/ValutaSpinner1"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="RASHOD" />
+            android:layout_alignLeft="@id/strut1"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="20dp"
+            android:text="BAM"
+            android:layout_marginTop="3dp"
+            />
 
-    </RadioGroup>
+    </RelativeLayout>
 
 
     <android.support.v7.widget.AppCompatTextView
@@ -43,14 +65,14 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Unesite iznos"
+        android:text="Podaci o ostatku novca (Iznos i valuta)"
         android:layout_below="@+id/VrstaTroskaSppiner"
         android:layout_alignStart="@+id/VrstaTroskaSppiner"
-        />
+        android:layout_weight="0.01" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -66,13 +88,13 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/strut"
             android:layout_alignParentLeft="true"
-            android:id="@+id/IznosDecimal"
+            android:id="@+id/Iznos2"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="0dp"
             android:inputType="numberDecimal" />
 
         <Spinner
-            android:id="@+id/ValutaSpinner"
+            android:id="@+id/ValutaSpinner2"
             style="@style/Widget.AppCompat.Spinner.Underlined"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,31 +108,6 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/editText16"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Izaberite Vrstu Rashoda"
-        android:layout_below="@+id/VrstaTroskaSppiner"
-        android:layout_alignStart="@+id/VrstaTroskaSppiner"
-        />
-
-    <Spinner
-        android:id="@+id/VrstaTroskaSppiner"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText5"
-        android:layout_alignParentStart="true"
-
-        style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
     <Button
         android:id="@+id/button3"
@@ -121,6 +118,5 @@
         android:layout_marginTop="20dp"
         android:onClick="OnButtonClick"
         android:text="SAČUVAJ" />
-
 
 </LinearLayout>
