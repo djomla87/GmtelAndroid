@@ -112,6 +112,46 @@
 
         style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/editText61"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Izaberite datum zaduženja"
+        android:layout_below="@+id/VrstaTroskaSppiner"
+        android:layout_alignStart="@+id/VrstaTroskaSppiner"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_baseline_access_time_24px"
+            android:onClick="showDatePickerDialog"
+            />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/datumIvrijeme"
+            android:layout_width="130dp"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:layout_marginRight="20dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"

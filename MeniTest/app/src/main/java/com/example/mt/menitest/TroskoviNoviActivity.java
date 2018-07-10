@@ -1,18 +1,26 @@
 package com.example.mt.menitest;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -20,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static com.example.mt.menitest.R.id.Status;
 
@@ -168,16 +177,94 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
         Spinner sp = (Spinner)findViewById(R.id.ValutaSpinner);
         Spinner sp1 = (Spinner)findViewById(R.id.VrstaTroskaSppiner);
 
+        TextView et = (TextView)findViewById(R.id.datumIvrijeme);
+
         String tip = rb1.isChecked() ? "RASHOD" : "ZADUŽENJE";
         String iznos = iznosText.getText().toString();
         String valuta = sp.getSelectedItem().toString();
         String vrstatroska = sp1.getSelectedItem().toString();
 
+
         int IdTrosak = objTrosak == null ? 0 : objTrosak.getId();
 
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token="+ token + "&IdTrosak=" + IdTrosak + "&iznos="+ iznos +"&valuta="+
-                valuta+"&tip="+tip+"&vrstatroska="+vrstatroska+"&napomena=");
 
+        boolean validacija = true;
+
+        if (iznos.equals("") || valuta.equals("")) {
+            Snackbar.make(view, "Iznos i valuta moraju biti popunjeni", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            validacija = false;
+        }
+        else if (tip.equals("RASHOD") && vrstatroska.equals("")) {
+            Snackbar.make(view, "Pri unosu rashoda morate odabrati i vrstu rashoda", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            validacija = false;
+        }
+        else if (et.getText().equals(""))
+        {
+            Snackbar.make(view, "Niste odabrali datum!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+            validacija = false;
+        }
+
+        if(validacija)
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token="+ token + "&IdTrosak=" + IdTrosak + "&iznos="+ iznos +"&valuta="+
+                valuta+"&tip="+tip+"&vrstatroska="+vrstatroska+"&napomena=&date="+et.getText());
+
+    }
+
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new TroskoviRazmjenaAcitivty.DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            // Create a new instance of DatePickerDialog and return it
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+            TextView et = (TextView)getActivity().findViewById(R.id.datumIvrijeme);
+            et.setText(dayOfMonth + "." + (month + 1) + "." + year);
+
+            DialogFragment newFragment = new TroskoviRazmjenaAcitivty.TimePickerFragment();
+            newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+        }
+    }
+
+    public static class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+            TextView et = (TextView)getActivity().findViewById(R.id.datumIvrijeme);
+            et.setText(et.getText() + " "+  hourOfDay+":"+minute);
+        }
     }
 
 }
