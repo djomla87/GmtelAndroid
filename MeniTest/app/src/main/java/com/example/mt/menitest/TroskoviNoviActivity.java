@@ -262,8 +262,14 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
+            String hour = "0"+hourOfDay;
+            hour = hour.substring(hour.length()-2);
+
+            String min = "0"+minute;
+            min = min.substring(min.length()-2);
+
             TextView et = (TextView)getActivity().findViewById(R.id.datumIvrijeme);
-            et.setText(et.getText() + " "+  hourOfDay+":"+minute);
+            et.setText(et.getText() + " "+  hour+":"+min);
         }
     }
 

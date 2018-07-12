@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -123,9 +124,13 @@ public class TroskoviRazmjenaAcitivty extends AppCompatActivity implements LoadJ
         if (iznos2.getText().toString().equals(""))
             iznos2.setText("0");
 
-        if (validacija)
-            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/RazmjeniNovac?id="+ objTrosak.getId() +
-                    "&iznos1=" + iznos1.getText() + "&iznos2="+ iznos2.getText() +"&valuta1="+ valuta1+"&valuta2="+valuta2+"&date="+et.getText());
+        if (validacija) {
+            Button btn = (Button)findViewById(R.id.button3);
+            btn.setEnabled(false);
+
+            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/RazmjeniNovac?id=" + objTrosak.getId() +
+                    "&iznos1=" + iznos1.getText() + "&iznos2=" + iznos2.getText() + "&valuta1=" + valuta1 + "&valuta2=" + valuta2 + "&date=" + et.getText());
+        }
     }
 
 
@@ -152,6 +157,11 @@ public class TroskoviRazmjenaAcitivty extends AppCompatActivity implements LoadJ
 
     @Override
     public void onError() {
+
+        Toast.makeText(this, "Došlo je do greške! Provjerite internet konekciju!", Toast.LENGTH_SHORT).show();
+
+        Button btn = (Button)findViewById(R.id.button3);
+        btn.setEnabled(true);
 
     }
 
@@ -205,7 +215,15 @@ public class TroskoviRazmjenaAcitivty extends AppCompatActivity implements LoadJ
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
             TextView et = (TextView)getActivity().findViewById(R.id.datumIvrijeme);
-            et.setText(et.getText() + " "+  hourOfDay+":"+minute);
+
+            String hour = "0"+hourOfDay;
+            hour = hour.substring(hour.length()-2);
+
+
+            String min = "0"+minute;
+            min = min.substring(min.length()-2);
+
+            et.setText(et.getText() + " "+  hour+":"+min);
         }
     }
 
