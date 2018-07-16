@@ -24,6 +24,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -128,9 +130,17 @@ public class TroskoviRazmjenaAcitivty extends AppCompatActivity implements LoadJ
             Button btn = (Button)findViewById(R.id.button3);
             btn.setEnabled(false);
 
+
+            try {
+                String query1 = URLEncoder.encode(et.getText().toString(), "utf-8");
+
             new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/RazmjeniNovac?id=" + objTrosak.getId() +
-                    "&iznos1=" + iznos1.getText() + "&iznos2=" + iznos2.getText() + "&valuta1=" + valuta1 + "&valuta2=" + valuta2 + "&date=" + et.getText());
-        }
+                    "&iznos1=" + iznos1.getText() + "&iznos2=" + iznos2.getText() + "&valuta1=" + valuta1 + "&valuta2=" + valuta2 + "&date=" + query1);
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            }
     }
 
 

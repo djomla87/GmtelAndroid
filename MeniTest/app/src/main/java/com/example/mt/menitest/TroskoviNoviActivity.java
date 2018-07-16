@@ -27,6 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -207,9 +209,20 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
             validacija = false;
         }
 
-        if(validacija)
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token="+ token + "&IdTrosak=" + IdTrosak + "&iznos="+ iznos +"&valuta="+
-                valuta+"&tip="+tip+"&vrstatroska="+vrstatroska+"&napomena=&date="+et.getText());
+        if(validacija) {
+
+            try {
+
+                String query1 = URLEncoder.encode(vrstatroska, "utf-8");
+                String query2 = URLEncoder.encode(et.getText().toString(), "utf-8");
+
+            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token=" + token + "&IdTrosak=" + IdTrosak + "&iznos=" + iznos + "&valuta=" +
+                    valuta + "&tip=" + tip + "&vrstatroska=" + query1 + "&napomena=&date=" + query2);
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            }
 
     }
 
