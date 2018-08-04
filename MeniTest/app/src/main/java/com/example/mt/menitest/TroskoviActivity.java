@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
@@ -243,6 +244,7 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
             TextView DatumTroska = (TextView)v.findViewById(R.id.DatumTroska);
             TextView TipTroska = (TextView)v.findViewById(R.id.TipTroska);
             TextView VrstaTroska = (TextView)v.findViewById(R.id.VrstaTroska);
+            ImageView slika = (ImageView) v.findViewById(R.id.imageViewTrosak2);
 
             IznosTroska.setText(mTrosakList.get(position).getIznos());
             DatumTroska.setText(mTrosakList.get(position).getDatum());
@@ -253,6 +255,12 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
                 TipTroska.setTextColor(getResources().getColor(R.color.colorAccent));
             else
                 TipTroska.setTextColor(getResources().getColor(R.color.colorGreen));
+
+            if(mTrosakList.get(position).getKartica() == 1)
+            {
+                TipTroska.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                slika.setImageResource(R.drawable.ic_baseline_credit_card_24px);
+            }
 
             v.setTag(mTrosakList.get(position).getId());
 
