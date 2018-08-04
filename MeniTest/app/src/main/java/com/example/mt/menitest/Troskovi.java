@@ -13,14 +13,15 @@ public class Troskovi implements Serializable {
     private String Iznos;
     private String Datum;
     private String Tip;
+    private int Kartica;
 
-
-    public Troskovi(int id, String vrsta, String iznos, String datum, String tip) {
+    public Troskovi(int id, String vrsta, String iznos, String datum, String tip, int kartica) {
         Id = id;
         Vrsta = vrsta;
         Iznos = iznos;
         Datum = datum;
         Tip = tip;
+        Kartica = kartica;
     }
 
     public int getId() {
@@ -61,5 +62,13 @@ public class Troskovi implements Serializable {
 
     public void setTip(String tip) {
         Tip = tip;
+    }
+
+    public int getKartica() {
+        return Kartica;
+    }
+
+    public void setKartica(int kartica) {
+        Kartica = kartica;
     }
 }

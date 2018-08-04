@@ -101,10 +101,13 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
         SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
 
-        CheckBox cb = (CheckBox)findViewById(R.id.sendEmail);
+        CheckBox cb = (CheckBox)findViewById(R.id.sendEmailGmtel);
         int mail = cb.isChecked() ? 1 : 0;
 
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail+"&LONG="+LONG+"&LAT="+LAT);
+        CheckBox cb2 = (CheckBox)findViewById(R.id.sendEmailNarucioc);
+        int mail2 = cb.isChecked() ? 1 : 0;
+
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail+"&mail2="+mail2+"&LONG="+LONG+"&LAT="+LAT);
     }
 
      @Override

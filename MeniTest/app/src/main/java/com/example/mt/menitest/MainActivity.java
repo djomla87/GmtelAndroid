@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,8 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -101,37 +105,64 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
         }
 
+
+        new CheckInternetConn().execute();
+
+
+
         String token = preferences.getString("Token", "");
 
+        if (!isOnline())
+        {
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Internet nije dostupan !!!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
-        //  new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NoviTaskovi?token="+ token);
-        int radi = BackgroundService.getStarted();
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                    .show();
+        }
+        else {
+            //  new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NoviTaskovi?token="+ token);
+            int radi = BackgroundService.getStarted();
 
-        if (radi != 1)
-            startService(new Intent(this, BackgroundService.class));
+            if (radi != 1)
+                startService(new Intent(this, BackgroundService.class));
 
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            // Build the alert dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("GPS nije aktivan");
-            builder.setMessage("Molimo vas da omogućite Lokaciju / GPS");
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    // Show location settings when the user acknowledges the alert dialog
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
-                }
-            });
-            Dialog alertDialog = builder.create();
-            alertDialog.setCanceledOnTouchOutside(false);
-            alertDialog.show();
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                // Build the alert dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("GPS nije aktivan");
+                builder.setMessage("Molimo vas da omogućite Lokaciju / GPS");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Show location settings when the user acknowledges the alert dialog
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                Dialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
         }
 
     }
 
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
     @Override
     public void onLoaded(JSONArray arr){
@@ -220,32 +251,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_task) {
-            Intent intent = new Intent(this, TaskPrevozi.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_user) {
-        } else if (id == R.id.nav_barcode) {
-
-            try {
-
-                Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-                intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
-
-                startActivityForResult(intent, 0);
-
-            } catch (Exception e) {
-
-                Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
-                Intent marketIntent = new Intent(Intent.ACTION_VIEW,marketUri);
-                startActivity(marketIntent);
-
-            }
-
-        } else if (id == R.id.nav_logout) {
+        if (id == R.id.nav_logout) {
 
             SharedPreferences preferences = getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
 
@@ -260,9 +266,69 @@ public class MainActivity extends AppCompatActivity
             moveTaskToBack(true);
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
-        } else if (id == R.id.nav_trosak){
-            Intent intent = new Intent(this, TroskoviActivity.class);
-            startActivity(intent);
+        }
+
+        if (!isOnline())
+        {
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Internet nije dostupan !!!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+
+                    .show();
+        }
+        else {
+
+            if (id == R.id.nav_home) {
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else if (id == R.id.nav_task) {
+                Intent intent = new Intent(this, TaskPrevozi.class);
+                startActivity(intent);
+
+            } else if (id == R.id.nav_user) {
+            } else if (id == R.id.nav_barcode) {
+
+                try {
+
+                    Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
+
+                    startActivityForResult(intent, 0);
+
+                } catch (Exception e) {
+
+                    Uri marketUri = Uri.parse("market://details?id=com.google.zxing.client.android");
+                    Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+                    startActivity(marketIntent);
+
+                }
+
+            } else if (id == R.id.nav_logout) {
+
+                SharedPreferences preferences = getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
+
+                preferences.edit().remove("Korisnik").commit();
+                preferences.edit().remove("Token").commit();
+
+                Intent intent = new Intent(this, MainActivity.class);
+                stopService(new Intent(this, BackgroundService.class));
+                startActivity(intent);
+
+            } else if (id == R.id.nav_exit) {
+                moveTaskToBack(true);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                System.exit(1);
+            } else if (id == R.id.nav_trosak) {
+                Intent intent = new Intent(this, TroskoviActivity.class);
+                startActivity(intent);
+            }
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -328,6 +394,54 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private class CheckInternetConn extends AsyncTask<Void, Void, Boolean>
+    {
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            //do stuff and return the value you want
+            try {
+                //make a URL to a known source
+                URL url = new URL("http://www.google.com");
+
+                //open a connection to that source
+                HttpURLConnection urlConnect = (HttpURLConnection)url.openConnection();
+
+                //trying to retrieve data from the source. If there
+                //is no connection, this line will fail
+                Object objData = urlConnect.getContent();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result)
+        {
+            // Call activity method with results
+            ProvjeriInternet(result);
+        }
+    }
+
+    private void ProvjeriInternet(Boolean result) {
+
+        if(!result) {
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Internet nije dostupan !!!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light))
+                    .show();
+        }
+    }
 }
 
 

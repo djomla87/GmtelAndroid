@@ -3,7 +3,9 @@ package com.example.mt.menitest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -134,15 +136,36 @@ public class TroskoviRazmjenaAcitivty extends AppCompatActivity implements LoadJ
             try {
                 String query1 = URLEncoder.encode(et.getText().toString(), "utf-8");
 
+                if (!isOnline() )
+                    throw new Exception("Internet nije dostupan");
+
+
             new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/RazmjeniNovac?id=" + objTrosak.getId() +
                     "&iznos1=" + iznos1.getText() + "&iznos2=" + iznos2.getText() + "&valuta1=" + valuta1 + "&valuta2=" + valuta2 + "&date=" + query1);
 
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            } catch (Exception e) {
+
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar.make(parentLayout, "Greška u snimanju razmjene: " + e.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("CLOSE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        })
+                        .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                        .show();
             }
             }
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
     @Override
     public void onLoaded(JSONObject obj) {

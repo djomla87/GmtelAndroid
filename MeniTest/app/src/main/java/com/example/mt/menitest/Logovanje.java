@@ -3,6 +3,7 @@ package com.example.mt.menitest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,11 +37,35 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
 */
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
     public void onLoginButtonClick(View view)
     {
         EditText Username = (EditText) findViewById(R.id.Username);
         EditText Lozinka = (EditText) findViewById(R.id.Password);
 
+
+        if (!isOnline())
+        {
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Internet nije dostupan !!!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+
+                    .show();
+        }
+        else
         new LoadJsonObject(this).execute( getResources().getString(R.string.ProdukcijaSajt) + "api/Login?username="+Username.getText()+"&password="+Lozinka.getText());   //http://gmtel-office.com/
     }
 

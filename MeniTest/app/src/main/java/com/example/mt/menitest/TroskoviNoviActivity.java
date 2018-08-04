@@ -6,7 +6,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.design.widget.CheckableImageButton;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -83,11 +86,17 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
             RadioButton rb1 = (RadioButton)findViewById(R.id.radioRashod);
             RadioButton rb2 = (RadioButton)findViewById(R.id.radioZaduzenje);
             EditText iznosText = (EditText)findViewById(R.id.IznosDecimal);
+            CheckBox cbKartica = (CheckBox)findViewById(R.id.Kartica);
 
             String [] niz = objTrosak.getIznos().split(" ");
 
             Spinner sp = (Spinner)findViewById(R.id.ValutaSpinner);
             Spinner sp1 = (Spinner)findViewById(R.id.VrstaTroskaSppiner);
+
+            if( objTrosak.getKartica() == 1 )
+                cbKartica.setChecked(true);
+            else
+                cbKartica.setChecked(false);
 
             if(objTrosak.getTip().equals("RASHOD"))
             {
@@ -107,9 +116,34 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
 
         }
 
-        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/ListaVrsteTroskova");
+        try {
+            if (!isOnline())
+                throw new Exception("Internet nije dostupan");
 
+            new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/ListaVrsteTroskova");
+        }
+        catch (Exception e){
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Greška u učitavanju: " + e.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
 
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                    .show();
+
+        }
+
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
     @Override
@@ -178,6 +212,7 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
         EditText iznosText = (EditText)findViewById(R.id.IznosDecimal);
         Spinner sp = (Spinner)findViewById(R.id.ValutaSpinner);
         Spinner sp1 = (Spinner)findViewById(R.id.VrstaTroskaSppiner);
+        CheckBox cbKartica = (CheckBox)findViewById(R.id.Kartica);
 
         TextView et = (TextView)findViewById(R.id.datumIvrijeme);
 
@@ -185,7 +220,7 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
         String iznos = iznosText.getText().toString();
         String valuta = sp.getSelectedItem().toString();
         String vrstatroska = sp1.getSelectedItem().toString();
-
+        String Kartica = cbKartica.isChecked() ? "1" : "0";
 
         int IdTrosak = objTrosak == null ? 0 : objTrosak.getId();
 
@@ -216,11 +251,24 @@ public class TroskoviNoviActivity extends AppCompatActivity implements LoadJSONT
                 String query1 = URLEncoder.encode(vrstatroska, "utf-8");
                 String query2 = URLEncoder.encode(et.getText().toString(), "utf-8");
 
-            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token=" + token + "&IdTrosak=" + IdTrosak + "&iznos=" + iznos + "&valuta=" +
-                    valuta + "&tip=" + tip + "&vrstatroska=" + query1 + "&napomena=&date=" + query2);
 
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                if (!isOnline())
+                    throw new Exception("Internet nije dostupan");
+
+            new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/NapraviVozacevTrosak?token=" + token + "&IdTrosak=" + IdTrosak + "&iznos=" + iznos + "&valuta=" +
+                    valuta + "&tip=" + tip + "&vrstatroska=" + query1 + "&napomena=&date=" + query2 + "&Kartica=" + Kartica);
+
+            } catch (Exception e) {
+                View parentLayout = findViewById(android.R.id.content);
+                Snackbar.make(parentLayout, "Greška u snimanju troška: " + e.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("CLOSE", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        })
+                        .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                        .show();
             }
             }
 

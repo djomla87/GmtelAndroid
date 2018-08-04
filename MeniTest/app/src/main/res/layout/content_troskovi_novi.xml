@@ -152,6 +152,17 @@
             android:textSize="18sp" />
     </LinearLayout>
 
+
+    <CheckBox
+        android:id="@+id/Kartica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Da li je plaćanje izvršeno karticom?"
+        />
+
     <Button
         android:id="@+id/button3"
         android:layout_width="match_parent"

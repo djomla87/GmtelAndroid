@@ -3,6 +3,7 @@ package com.example.mt.menitest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -74,11 +75,38 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
         SharedPreferences preferences =  getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
 
-        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/ListaVozacevihTroskova?token="+token);
+
+
+
+        try {
+
+            if (!isOnline())
+                throw new Exception("Internet nije dostupan");
+            new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/ListaVozacevihTroskova?token=" + token);
+        }
+        catch (Exception ex)
+        {
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar.make(parentLayout, "Greška u listanju troškova: " + ex.getMessage(), Snackbar.LENGTH_INDEFINITE)
+                    .setAction("CLOSE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    })
+                    .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
+                    .show();
+        }
 
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
 
     @Override
@@ -149,8 +177,8 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
                 String Tip       = arr.getJSONObject(i).getString("Tip");
                 String Iznos     = arr.getJSONObject(i).getString("Iznos");
                 String Datum     = arr.getJSONObject(i).getString("Datum");
-
-                mTroskoviMapList.add(new Troskovi(Id, Vrsta,Iznos, Datum, Tip  ));
+                int Kartica      = arr.getJSONObject(i).getInt("Kartica");
+                mTroskoviMapList.add(new Troskovi(Id, Vrsta,Iznos, Datum, Tip, Kartica  ));
 
             } catch (JSONException e) {
                 e.printStackTrace();
