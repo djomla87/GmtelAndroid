@@ -97,6 +97,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.mt.menitest.TroskoviActivity" />
         </activity>
+        <activity
+            android:name=".Search"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.mt.menitest.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

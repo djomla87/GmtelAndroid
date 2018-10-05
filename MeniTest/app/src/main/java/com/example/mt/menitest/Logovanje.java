@@ -85,6 +85,8 @@ public class Logovanje extends AppCompatActivity implements LoadJsonObject.Liste
                 preferences.edit().putString("Korisnik", result.getString("Korisnik")).commit();
                 preferences.edit().putString("Token", result.getString("Code")).commit();
                 preferences.edit().putString("Rola", result.getString("Rola")).commit();
+                preferences.edit().putInt("IdVozac", result.getInt("IdVozac")).commit();
+
 
                 EditText Username = (EditText) findViewById(R.id.Username);
                 EditText Lozinka = (EditText) findViewById(R.id.Password);

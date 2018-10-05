@@ -1,10 +1,12 @@
 package com.example.mt.menitest;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,21 +24,32 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mladen.todorovic on 9/27/2017.
  */
 
-public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, AdapterView.OnItemClickListener {
+public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, LoadJsonObject.Listener, AdapterView.OnItemClickListener {
 
 
     private tabDostavljeno.customAdapter adapter;
     private ListView lvTaskovi;
     private List<Task> mTaskMapList = new ArrayList<>();
     private ProgressBar bar = null;
+    private Map<Integer, String> vozaci = new HashMap<Integer, String>();
+
+
+    public tabDostavljeno(){
+
+        mTaskMapList = new ArrayList<>();
+        vozaci = new HashMap<Integer, String>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,12 +70,17 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
         SharedPreferences preferences =  this.getActivity().getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
 
+        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozaci/VratiAktivneVozaceOsim?IdVozac=0");
         new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "api/Tasks?token="+token);
 
 
         return rootView;
     }
 
+    public void PrezaduziVozaca(int IdVozac, int IdDnevnik )
+    {
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "/Vozaci/PromjeniVozaca?IdVozac=" + IdVozac + "&IdDnevnik=" + IdDnevnik);
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,7 +146,27 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
                 detalji.putExtra("status","Dostavljeno");
                 this.startActivity(detalji);
                 break;
-            }default:
+            }
+            case R.id.menu_promjeni_vozaca3: {
+                final int IdDnevnik = mTaskMapList.get(index).getIdTask();
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                //AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create(); //Read Update
+                alertDialog.setTitle("Prezaduži vožnju");
+                alertDialog.setItems(vozaci.values().toArray(new String[0]), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+
+                        int idVozaca = vozaci.keySet().toArray(new Integer [0])[which];
+                        PrezaduziVozaca(idVozaca, IdDnevnik);
+
+                    }
+
+                });
+                alertDialog.show();
+                break;
+            }
+            default:
                 return super.onContextItemSelected(item);
         }
 
@@ -137,27 +175,41 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
 
     @Override
     public void onLoaded(JSONArray arr) {
+        String ObjectName = "";
 
         for (int i =0; i<arr.length(); i++)
         {
             try {
-                int     IdTask          = arr.getJSONObject(i).getInt("IdTask");
-                String SerijskiBroj     = arr.getJSONObject(i).getString("SerijskiBroj");
-                String Vozilo           = arr.getJSONObject(i).getString("Vozilo");
-                String Istovar          = arr.getJSONObject(i).getString("Istovar");
-                String Roba             = arr.getJSONObject(i).getString("Roba");
-                String Status           = arr.getJSONObject(i).getString("Status");
-                String DatumAzuriranja  = arr.getJSONObject(i).getString("DatumAzuriranja");
-                String Utovar           = arr.getJSONObject(i).getString("Utovar");
-                String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
-                String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
-                String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
-                String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
-                String Napomena = arr.getJSONObject(i).getString("Napomena");
-                String RefBroj = arr.getJSONObject(i).getString("RefBroj");
-                String Pregledano = arr.getJSONObject(i).getString("Pregledano");
-                if(Status.contains("ISTOVARENO"))
-                    mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano ));
+
+                ObjectName = arr.getJSONObject(i).has("key") ? "Vozaci" : "Prevozi";
+
+                if (ObjectName.equals("Prevozi")) {
+                    int IdTask = arr.getJSONObject(i).getInt("IdTask");
+                    String SerijskiBroj = arr.getJSONObject(i).getString("SerijskiBroj");
+                    String Vozilo = arr.getJSONObject(i).getString("Vozilo");
+                    String Istovar = arr.getJSONObject(i).getString("Istovar");
+                    String Roba = arr.getJSONObject(i).getString("Roba");
+                    String Status = arr.getJSONObject(i).getString("Status");
+                    String DatumAzuriranja = arr.getJSONObject(i).getString("DatumAzuriranja");
+                    String Utovar = arr.getJSONObject(i).getString("Utovar");
+                    String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
+                    String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
+                    String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
+                    String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
+                    String Napomena = arr.getJSONObject(i).getString("Napomena");
+                    String RefBroj = arr.getJSONObject(i).getString("RefBroj");
+                    String Pregledano = arr.getJSONObject(i).getString("Pregledano");
+                    if (Status.contains("ISTOVARENO"))
+                        mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+
+                }
+
+                if (ObjectName.equals("Vozaci")) {
+                    int Key = arr.getJSONObject(i).getInt("key");
+                    String Vozac = arr.getJSONObject(i).getString("value");
+
+                    vozaci.put(Key, Vozac);
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -170,6 +222,27 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
         bar.setVisibility(View.INVISIBLE);
     }
 
+
+    @Override
+    public void onLoaded(JSONObject obj) {
+        String response = null;
+        String message = null;
+
+        try {
+            response = obj.getString("response");
+            message = obj.getString("message");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (response.equals("OK")) {
+            Toast.makeText(getActivity(), "Transport prezadužen", Toast.LENGTH_SHORT).show();
+            //  Intent i = new Intent(this, TroskoviActivity.class);
+            //  this.startActivity(i);
+        }
+        else {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onError() {

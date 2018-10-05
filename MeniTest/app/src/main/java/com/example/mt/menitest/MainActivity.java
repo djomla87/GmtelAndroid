@@ -292,6 +292,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_user) {
+            } else if (id == R.id.nav_pretraga) {
+
+                Intent intent = new Intent(this, Search.class);
+                startActivity(intent);
+
             } else if (id == R.id.nav_barcode) {
 
                 try {

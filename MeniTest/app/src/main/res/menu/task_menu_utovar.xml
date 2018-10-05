@@ -9,4 +9,7 @@
     <item android:id="@+id/menu_istovar1"
         android:title="Istovareno">
     </item>
+    <item android:id="@+id/menu_promjeni_vozaca1"
+        android:title="Proslijedi prevoz">
+    </item>
 </menu>
