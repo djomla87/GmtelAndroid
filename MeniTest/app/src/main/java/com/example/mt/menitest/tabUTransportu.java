@@ -44,11 +44,13 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
     private List<Task> mTaskMapList = new ArrayList<>();
     private ProgressBar bar = null;
     private Map<Integer, String> vozaci = new HashMap<Integer, String>();
+    private Map<Integer, String> vozila = new HashMap<Integer, String>();
 
     public tabUTransportu(){
 
         mTaskMapList = new ArrayList<>();
         vozaci = new HashMap<Integer, String>();
+        vozila = new HashMap<Integer, String>();
     }
 
     @Override
@@ -70,15 +72,16 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
         String token = preferences.getString("Token", "");
 
         new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozaci/VratiAktivneVozaceOsim?IdVozac=0");
+        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozilo/VratiAktivnaVozilaOsim?IdVozilo=0");
         new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "api/Tasks?token="+token);
 
 
         return rootView;
     }
 
-    public void PrezaduziVozaca(int IdVozac, int IdDnevnik )
+    public void PrezaduziVozaca(int IdVozac, int IdDnevnik, int IdVozilo )
     {
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "/Vozaci/PromjeniVozaca?IdVozac=" + IdVozac + "&IdDnevnik=" + IdDnevnik);
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozaci/PromjeniVozaca?IdVozac=" + IdVozac + "&IdDnevnik=" + IdDnevnik  + "&IdVozilo=" + IdVozilo);
     }
 
     @Override
@@ -139,15 +142,39 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
             case R.id.menu_promjeni_vozaca2: {
                 final int IdDnevnik = mTaskMapList.get(index).getIdTask();
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                //AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create(); //Read Update
                 alertDialog.setTitle("Prezaduži vožnju");
                 alertDialog.setItems(vozaci.values().toArray(new String[0]), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
                         // of the selected item
+                        final int idVozaca = vozaci.keySet().toArray(new Integer [0])[which];
 
-                        int idVozaca = vozaci.keySet().toArray(new Integer [0])[which];
-                        PrezaduziVozaca(idVozaca, IdDnevnik);
+
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                        alertDialog.setTitle("Odaberi vozilo");
+                        alertDialog.setItems(vozila.values().toArray(new String[0]), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+                                final int idVozilo = vozila.keySet().toArray(new Integer [0])[which];
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setMessage("Prezaduži transport na " + vozaci.get(idVozaca) + " u vozilo " + vozila.get(idVozilo))
+                                        .setPositiveButton("Potvrdi", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                PrezaduziVozaca(idVozaca, IdDnevnik, idVozilo);
+                                            }
+                                        })
+                                        .setNegativeButton("Odustani", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                            }
+                                        });
+
+                                builder.show();
+
+                            }
+                        });
+                        alertDialog.show();
 
                     }
 
@@ -169,7 +196,7 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
         {
             try {
 
-                ObjectName = arr.getJSONObject(i).has("key") ? "Vozaci" : "Prevozi";
+                ObjectName = arr.getJSONObject(i).has("type") ? "Vozilo" : (arr.getJSONObject(i).has("key") ? "Vozaci" : "Prevozi");
 
                 if (ObjectName.equals("Prevozi")) {
                     int IdTask = arr.getJSONObject(i).getInt("IdTask");
@@ -200,6 +227,12 @@ public class tabUTransportu  extends Fragment implements LoadJSONTask.Listener, 
                     vozaci.put(Key, Vozac);
                 }
 
+                if (ObjectName.equals("Vozilo")) {
+                    int Key = arr.getJSONObject(i).getInt("key");
+                    String Vozac = arr.getJSONObject(i).getString("value");
+
+                    vozila.put(Key, Vozac);
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();

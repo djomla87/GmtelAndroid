@@ -36,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Search extends AppCompatActivity implements LoadJSONTask.Listener, LoadJsonObject.Listener, AdapterView.OnItemClickListener {
 
@@ -45,6 +46,7 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
     private List<Task> AllTask = new ArrayList<Task>();
     private List<Task> SearchList = new ArrayList<Task>();
     private int IdVozac = 0;
+    private Map<Integer, String> vozila = new HashMap<Integer, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
         SharedPreferences preferences =  this.getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
         IdVozac = preferences.getInt("IdVozac", 0);
+
+        new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozilo/VratiAktivnaVozilaOsim?IdVozilo=0");
         new LoadJSONTask(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/SearchDnevnik?token="+token);
 
     }
@@ -117,31 +121,43 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
     public void onLoaded(JSONArray arr) {
 
         AllTask.clear();
+        String ObjectName = "";
 
         for (int i = 0; i < arr.length(); i++) {
             try {
-                int IdTask = arr.getJSONObject(i).getInt("IdTask");
-                String SerijskiBroj = arr.getJSONObject(i).getString("SerijskiBroj");
-                String Vozilo = arr.getJSONObject(i).getString("Vozilo");
-                String Istovar = arr.getJSONObject(i).getString("Istovar");
-                String Roba = arr.getJSONObject(i).getString("Roba");
-                String Status = arr.getJSONObject(i).getString("Status");
-                String DatumAzuriranja = arr.getJSONObject(i).getString("DatumAzuriranja");
-                String Utovar = arr.getJSONObject(i).getString("Utovar");
-                String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
-                String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
-                String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
-                String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
-                String Napomena = arr.getJSONObject(i).getString("Napomena");
-                String RefBroj = arr.getJSONObject(i).getString("RefBroj");
-                String Pregledano = arr.getJSONObject(i).getString("Pregledano");
 
-                SerijskiBroj = SerijskiBroj.replace("#"," ");
-              //  String Vozac = SerijskiBroj.split("#")[1];
+                ObjectName = arr.getJSONObject(i).has("type") ? "Vozilo" : "Prevozi";
 
-                AllTask.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
-                SearchList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                if (ObjectName.equals("Prevozi")) {
+                    int IdTask = arr.getJSONObject(i).getInt("IdTask");
+                    String SerijskiBroj = arr.getJSONObject(i).getString("SerijskiBroj");
+                    String Vozilo = arr.getJSONObject(i).getString("Vozilo");
+                    String Istovar = arr.getJSONObject(i).getString("Istovar");
+                    String Roba = arr.getJSONObject(i).getString("Roba");
+                    String Status = arr.getJSONObject(i).getString("Status");
+                    String DatumAzuriranja = arr.getJSONObject(i).getString("DatumAzuriranja");
+                    String Utovar = arr.getJSONObject(i).getString("Utovar");
+                    String UvoznaSpedicija = arr.getJSONObject(i).getString("UvoznaSpedicija");
+                    String IzvoznaSpedicija = arr.getJSONObject(i).getString("IzvoznaSpedicija");
+                    String Uvoznik = arr.getJSONObject(i).getString("Uvoznik");
+                    String Izvoznik = arr.getJSONObject(i).getString("Izvoznik");
+                    String Napomena = arr.getJSONObject(i).getString("Napomena");
+                    String RefBroj = arr.getJSONObject(i).getString("RefBroj");
+                    String Pregledano = arr.getJSONObject(i).getString("Pregledano");
 
+                    SerijskiBroj = SerijskiBroj.replace("#", " ");
+                    //  String Vozac = SerijskiBroj.split("#")[1];
+
+                    AllTask.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                    SearchList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                }
+
+                if (ObjectName.equals("Vozilo")) {
+                    int Key = arr.getJSONObject(i).getInt("key");
+                    String Vozac = arr.getJSONObject(i).getString("value");
+
+                    vozila.put(Key, Vozac);
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -188,9 +204,10 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
 
     }
 
-    public void PrezaduziVozaca(int IdVozac, int IdDnevnik )
+
+    public void PrezaduziVozaca(int IdVozac, int IdDnevnik, int IdVozilo )
     {
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "/Vozaci/PromjeniVozaca?IdVozac=" + IdVozac + "&IdDnevnik=" + IdDnevnik);
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "Vozaci/PromjeniVozaca?IdVozac=" + IdVozac + "&IdDnevnik=" + IdDnevnik  + "&IdVozilo=" + IdVozilo);
     }
 
     @Override
@@ -198,27 +215,36 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
         final int IdDnevnik  = SearchList.get(position).getIdTask();
 
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Prezaduži transport " + SearchList.get(position).getSerijskiBroj() + " na sebe??")
-                .setPositiveButton("Preuzmi", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Odaberi vozilo");
+        alertDialog.setItems(vozila.values().toArray(new String[0]), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // The 'which' argument contains the index position
+                // of the selected item
+                final int idVozilo = vozila.keySet().toArray(new Integer [0])[which];
 
-                        PrezaduziVozaca(IdVozac, IdDnevnik);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Search.this);
+                builder.setMessage("Prezaduži transport " + SearchList.get(position).getSerijskiBroj() + " na sebe u vozilo " + vozila.get(idVozilo))
+                        .setPositiveButton("Preuzmi", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                PrezaduziVozaca(IdVozac, IdDnevnik, idVozilo);
+                            }
+                        })
+                        .setNegativeButton("Odustani", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
 
-                        /*
-                        Intent intent = new Intent(Search.this, TaskPrevozi.class);
-                        startActivity(intent);
-                        */
-                    }
-                })
-                .setNegativeButton("Odustani", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                });
+                builder.show();
 
-        builder.show();
+            }
+        });
+        alertDialog.show();
+
+
+
+
+
 
     }
 
