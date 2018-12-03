@@ -143,17 +143,42 @@ public class tabDostavljeno  extends Fragment implements LoadJSONTask.Listener, 
                 break;
             }
             case R.id.menu_istovar3: {
-                Intent detalji = new Intent(getActivity(), TaskDetail.class);
+
+                final Intent detalji = new Intent(getActivity(), TaskDetail.class);
                 Task clickedTask = mTaskMapList.get(index);
                 detalji.putExtra("task", clickedTask);
                 detalji.putExtra("status","Dostavljeno");
-                this.startActivity(detalji);
+                List <String> PodStatusi = new ArrayList<String>();
+                PodStatusi.add("Dostavljeno na krajnju lokaciju");
+                PodStatusi.add("Dostavljeno u skladište");
+                PodStatusi.add("Dostavljeno brzoj pošti");
+
+
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+                alertDialog.setTitle("Gdje je roba dostavljena?");
+                alertDialog.setItems(PodStatusi.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+
+                        int PodStatus = which;
+                        if (PodStatus == 2)
+                            PodStatus = 7;
+
+                        detalji.putExtra("podStatus",PodStatus);
+                        getActivity().startActivity(detalji);
+                    }
+
+                });
+                alertDialog.show();
+
+
+
                 break;
             }
             case R.id.menu_promjeni_vozaca3: {
                 final int IdDnevnik = mTaskMapList.get(index).getIdTask();
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-                //AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create(); //Read Update
                 alertDialog.setTitle("Prezaduži vožnju");
                 alertDialog.setItems(vozaci.values().toArray(new String[0]), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

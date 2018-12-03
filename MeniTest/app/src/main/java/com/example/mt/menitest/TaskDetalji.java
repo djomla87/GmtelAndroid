@@ -90,6 +90,7 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
         Intent detalji = new Intent( this, TaskDetail.class);
         detalji.putExtra("task", task);
         detalji.putExtra("status","Nije_utovareno");
+        detalji.putExtra("podStatus",0);
         this.startActivity(detalji);
     }
 
@@ -98,6 +99,7 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
         Intent detalji = new Intent( this, TaskDetail.class);
         detalji.putExtra("task", task);
         detalji.putExtra("status","U_transportu");
+        detalji.putExtra("podStatus",0);
         this.startActivity(detalji);
     }
 
@@ -106,6 +108,25 @@ public class TaskDetalji extends AppCompatActivity implements LoadJsonObject.Lis
         Intent detalji = new Intent( this, TaskDetail.class);
         detalji.putExtra("task", task);
         detalji.putExtra("status","Dostavljeno");
+        detalji.putExtra("podStatus",0);
+        this.startActivity(detalji);
+    }
+
+    public void btnDostavljenoBrzaPosta(View view)
+    {
+        Intent detalji = new Intent( this, TaskDetail.class);
+        detalji.putExtra("task", task);
+        detalji.putExtra("status","Dostavljeno");
+        detalji.putExtra("podStatus",7);
+        this.startActivity(detalji);
+    }
+
+    public void btnDostavljenoSkladiste(View view)
+    {
+        Intent detalji = new Intent( this, TaskDetail.class);
+        detalji.putExtra("task", task);
+        detalji.putExtra("status","Dostavljeno");
+        detalji.putExtra("podStatus",1);
         this.startActivity(detalji);
     }
 

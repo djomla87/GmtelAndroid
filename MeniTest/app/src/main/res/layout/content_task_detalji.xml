@@ -269,10 +269,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="63dp"
+            android:layout_height="50dp"
             android:background="#ffffff"
             android:orientation="horizontal"
-            android:paddingBottom="05dp"
+            android:paddingBottom="0dp"
             android:paddingLeft="0dp"
             android:paddingRight="0dp"
             android:paddingTop="0dp">
@@ -298,16 +298,49 @@
                 android:text="U Transportu"
                 android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/BtnDostavljeno"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@android:color/holo_green_dark"
-                android:onClick="btnDostavljeno"
-                android:text="Dostavljeno"
-                android:textSize="12sp" />
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="63dp"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:paddingBottom="05dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp">
+        <Button
+            android:id="@+id/BtnDostavljeno"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:onClick="btnDostavljeno"
+            android:text="Dostavljeno na krajnju lokaciju"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/BtnDostavljenoBrzaPosta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:onClick="btnDostavljenoBrzaPosta"
+            android:text="Dostavljeno brzoj pošti"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/BtnDostavljenoSkladiste"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:onClick="btnDostavljenoSkladiste"
+            android:text="Dostavljeno u skladište"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
 
     </LinearLayout>
 

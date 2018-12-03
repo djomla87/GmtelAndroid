@@ -30,6 +30,7 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
 
     private Task task;
     private String Status;
+    private int PodStatus;
     private LocationManager locationManager;
     private TextView TVlokacija;
 
@@ -44,9 +45,18 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
 
         task = (Task)getIntent().getSerializableExtra("task");
         Status = getIntent().getExtras().getString("status");
+        PodStatus = getIntent().getExtras().getInt("podStatus");
+
+        String StatusOpis = Status;
+
+        if(PodStatus == 1)
+            StatusOpis = StatusOpis + " (U Skladište)";
+        if(PodStatus == 7)
+            StatusOpis = StatusOpis + " (U Brzu Poštu)";
+
 
         TextView text = (TextView)findViewById(R.id.TaskPromjenaStatusa);
-        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + Status + " ?");
+        text.setText("Promjeni status prevoza " + "\nSerijski Broj: " + task.getSerijskiBroj() + "\nRelacija: " + task.getUtovar() + "\n" + task.getIstovar() + "\n u " + StatusOpis + " ?");
 
 
         ActivityCompat.requestPermissions(TaskDetail.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
@@ -107,7 +117,7 @@ public class TaskDetail extends AppCompatActivity implements LoadJsonObject.List
         CheckBox cb2 = (CheckBox)findViewById(R.id.sendEmailNarucioc);
         int mail2 = cb.isChecked() ? 1 : 0;
 
-        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status +"&token="+token+"&mail="+mail+"&mail2="+mail2+"&LONG="+LONG+"&LAT="+LAT);
+        new LoadJsonObject(this).execute(getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/GetUpdateStatus?id="+ task.getIdTask() + "&status="+ Status + "&PodStatus="+ PodStatus +"&token="+token+"&mail="+mail+"&mail2="+mail2+"&LONG="+LONG+"&LAT="+LAT);
     }
 
      @Override
