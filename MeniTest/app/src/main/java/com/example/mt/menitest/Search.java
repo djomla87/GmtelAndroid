@@ -144,12 +144,12 @@ public class Search extends AppCompatActivity implements LoadJSONTask.Listener, 
                     String Napomena = arr.getJSONObject(i).getString("Napomena");
                     String RefBroj = arr.getJSONObject(i).getString("RefBroj");
                     String Pregledano = arr.getJSONObject(i).getString("Pregledano");
-
+                    String Files = arr.getJSONObject(i).getString("Files");
                     SerijskiBroj = SerijskiBroj.replace("#", " ");
                     //  String Vozac = SerijskiBroj.split("#")[1];
 
-                    AllTask.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
-                    SearchList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                    AllTask.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano, Files));
+                    SearchList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano, Files));
                 }
 
                 if (ObjectName.equals("Vozilo")) {

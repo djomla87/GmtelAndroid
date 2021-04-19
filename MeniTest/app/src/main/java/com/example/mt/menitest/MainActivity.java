@@ -187,8 +187,8 @@ public class MainActivity extends AppCompatActivity
                 String Napomena = arr.getJSONObject(i).getString("Napomena");
                 String RefBroj = arr.getJSONObject(i).getString("RefBroj");
                 String Pregledano = arr.getJSONObject(i).getString("Pregledano");
-
-                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                String Files = arr.getJSONObject(i).getString("Files");
+                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano, Files));
 
 
 

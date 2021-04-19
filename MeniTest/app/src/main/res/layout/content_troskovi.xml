@@ -6,17 +6,34 @@
     tools:context="com.example.mt.menitest.TroskoviActivity"
     tools:showIn="@layout/activity_troskovi">
 
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingTop="55dp"
+        android:text="Preostali iznos: "
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
 
     <ListView
         android:layout_width="match_parent"
-        android:paddingTop="50dp"
-        android:layout_height="match_parent"
+        android:paddingTop="85dp"
+        android:layout_height="wrap_content"
         android:id="@+id/ListViewTroskovi"
-        android:layout_margin="10dp"
         android:dividerHeight="1dp"
         android:divider="@color/colorPrimary"
         tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp"></ListView>
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"></ListView>
+
+
 
 
     <ProgressBar

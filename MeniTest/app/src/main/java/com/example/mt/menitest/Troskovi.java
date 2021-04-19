@@ -14,14 +14,18 @@ public class Troskovi implements Serializable {
     private String Datum;
     private String Tip;
     private int Kartica;
+    private Double Prihod;
+    private Double Rashod;
 
-    public Troskovi(int id, String vrsta, String iznos, String datum, String tip, int kartica) {
+    public Troskovi(int id, String vrsta, String iznos, String datum, String tip, int kartica, Double prihod, Double rashod) {
         Id = id;
         Vrsta = vrsta;
         Iznos = iznos;
         Datum = datum;
         Tip = tip;
         Kartica = kartica;
+        Prihod = prihod;
+        Rashod = rashod;
     }
 
     public int getId() {
@@ -70,5 +74,21 @@ public class Troskovi implements Serializable {
 
     public void setKartica(int kartica) {
         Kartica = kartica;
+    }
+
+    public Double getPrihod() {
+        return Prihod;
+    }
+
+    public void setPrihod(Double prihod) {
+        Prihod = prihod;
+    }
+
+    public Double getRashod() {
+        return Rashod;
+    }
+
+    public void setRashod(Double rashod) {
+        Rashod = rashod;
     }
 }

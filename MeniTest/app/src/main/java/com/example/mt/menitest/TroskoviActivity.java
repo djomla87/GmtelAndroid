@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,7 +38,7 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
     private List<Troskovi> mTroskoviMapList = new ArrayList<>();
     private ProgressBar bar = null;
     private TroskoviActivity.customAdapter adapter;
-
+    private EditText ed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
         SharedPreferences preferences =  getSharedPreferences("GMTEL", Context.MODE_PRIVATE);
         String token = preferences.getString("Token", "");
 
-
+        ed = (EditText)findViewById(R.id.editText2);
 
 
         try {
@@ -170,6 +171,7 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
 
     @Override
     public void onLoaded(JSONArray arr) {
+        Double sum = 0.0;
         for (int i =0; i<arr.length(); i++)
         {
             try {
@@ -179,7 +181,12 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
                 String Iznos     = arr.getJSONObject(i).getString("Iznos");
                 String Datum     = arr.getJSONObject(i).getString("Datum");
                 int Kartica      = arr.getJSONObject(i).getInt("Kartica");
-                mTroskoviMapList.add(new Troskovi(Id, Vrsta,Iznos, Datum, Tip, Kartica  ));
+
+                Double Prihod     = arr.getJSONObject(i).getDouble("Prihod");
+                Double Rashod    = arr.getJSONObject(i).getDouble("Rashod");
+
+                sum = sum + Prihod - Rashod;
+                mTroskoviMapList.add(new Troskovi(Id, Vrsta,Iznos, Datum, Tip, Kartica, Prihod, Rashod  ));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -187,7 +194,9 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
 
         }
 
+        ed.setText("Preostali iznos: " + sum + " BAM");
         loadListView();
+
         bar.setVisibility(View.INVISIBLE);
     }
 
@@ -261,6 +270,8 @@ public class TroskoviActivity extends AppCompatActivity implements LoadJSONTask.
                 TipTroska.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 slika.setImageResource(R.drawable.ic_baseline_credit_card_24px);
             }
+
+
 
             v.setTag(mTrosakList.get(position).getId());
 

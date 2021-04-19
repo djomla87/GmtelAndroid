@@ -26,8 +26,11 @@ public class Task implements Serializable {
     private String Napomena;
     private String RefBroj;
     private String Pregledano;
+    private String Files;
 
-    public Task(int idTask, String serijskiBroj, String vozilo, String istovar, String roba, String status, String datumAzuriranja, String utovar, String uvoznaSpedicija, String izvoznaSpedicija, String uvoznik, String izvoznik, String napomena, String refBroj, String pregledano) {
+    public Task(int idTask, String serijskiBroj, String vozilo, String istovar, String roba, String status, String datumAzuriranja,
+                String utovar, String uvoznaSpedicija, String izvoznaSpedicija, String uvoznik,
+                String izvoznik, String napomena, String refBroj, String pregledano, String files) {
         IdTask = idTask;
         SerijskiBroj = serijskiBroj;
         Vozilo = vozilo;
@@ -43,6 +46,7 @@ public class Task implements Serializable {
         Napomena = napomena;
         RefBroj = refBroj;
         Pregledano = pregledano;
+        Files = files;
     }
 
     public List<Task> getAllTask() {
@@ -167,5 +171,13 @@ public class Task implements Serializable {
 
     public void setPregledano(String pregledano) {
         Pregledano = pregledano;
+    }
+
+    public String getFiles() {
+        return Files;
+    }
+
+    public void setFiles(String files) {
+        Files = files;
     }
 }

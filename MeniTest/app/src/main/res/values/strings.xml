@@ -3,7 +3,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="ProdukcijaSajt"> http://test.gmtel-office.com/ </string>
+    <string name="ProdukcijaSajt"> http://gmtel-office.com/ </string>
     <string name="TestSajt"> http://test.gmtel-office.com/ </string>
 
     <string name="action_settings">Podešavanja</string>

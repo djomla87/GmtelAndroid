@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -100,6 +101,8 @@
             android:id="@+id/Utovar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="onUtovarAdressClick"
+            android:clickable="true"
             android:text="TextView"
             android:textColor="@android:color/black" />
 
@@ -149,6 +152,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"
+            android:onClick="onIstovarAdressClick"
+            android:clickable="true"
             android:textColor="@android:color/black" />
 
         <TextView
@@ -250,6 +255,22 @@
             android:textColor="@android:color/black" />
 
         <TextView
+            android:id="@+id/BrojSlikaLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Broj Učitanih Slika"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/BrojSlika"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@android:color/black" />
+
+        <TextView
             android:id="@+id/prazno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -340,10 +361,65 @@
 
     </LinearLayout>
 
+        <TextView
+            android:id="@+id/UcitajSliku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ucitaj Sliku dokumentacije i robe: "
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingBottom="05dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="0dp" >
+
+        <Button
+            android:id="@+id/BtnUcitajSliku"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/tab_indicator_text"
+            android:onClick="btnUcitajIzGalerije"
+            android:text="Uslikaj novu sliku"
+            android:layout_weight="1"
+            android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/BtnUcitajSliku2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@android:color/tab_indicator_text"
+                android:onClick="btnUcitajIzGalerije2"
+                android:text="Učitaj Sliku iz galerije"
+                android:textSize="12sp" />
 
 
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/Uslikano"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:srcCompat="@mipmap/ic_account_circle_black_24dp" />
     </LinearLayout>
 
+
 </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBartask"
+        style="?android:attr/progressBarStyle"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

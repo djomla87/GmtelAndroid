@@ -108,8 +108,9 @@ public class BackgroundService extends Service implements LoadJSONTask.Listener 
                 String Napomena = arr.getJSONObject(i).getString("Napomena");
                 String RefBroj = arr.getJSONObject(i).getString("RefBroj");
                 String Pregledano = arr.getJSONObject(i).getString("Pregledano");
+                String Files = arr.getJSONObject(i).getString("Files");
 
-                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano));
+                mTaskMapList.add(new Task(IdTask, SerijskiBroj, Vozilo, Istovar, Roba, Status, DatumAzuriranja, Utovar, UvoznaSpedicija, IzvoznaSpedicija, Uvoznik, Izvoznik, Napomena, RefBroj, Pregledano, Files));
 
             } catch (JSONException e) {
                 e.printStackTrace();
