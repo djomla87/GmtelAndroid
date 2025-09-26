@@ -1,10 +1,14 @@
 package com.example.mt.menitest;
 
+import com.example.mt.menitest.R;  // Correct
+// NOT import android.R;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.design.widget.NavigationView;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuInflater;

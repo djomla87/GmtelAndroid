@@ -9,9 +9,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
-import android.support.v7.app.NotificationCompat;
+import androidx.annotation.IntDef;
+//import android.support.annotation.IntDef;
+
+import androidx.annotation.Nullable;
+//import android.support.annotation.Nullable;
+
+import androidx.core.app.NotificationCompat;
+//import android.support.v7.app.NotificationCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -135,7 +140,7 @@ public class BackgroundService extends Service implements LoadJSONTask.Listener 
 
                 Intent intent = new Intent(this, TaskDetalji.class);   //TaskPrevozi.class
                 intent.putExtra("task", mTaskMapList.get(i));
-                PendingIntent pendingIntet = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntet = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
                 notification.setSmallIcon(R.drawable.ic_launcher);
                 notification.setTicker("This is a ticker");

@@ -11,7 +11,7 @@
     android:weightSum="1">
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/editText16"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -60,7 +60,7 @@
     </RelativeLayout>
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/editText6"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -108,7 +108,7 @@
 
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/editText116"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -140,7 +140,7 @@
             android:onClick="showDatePickerDialog"
             />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/datumIvrijeme"
             android:layout_width="130dp"
             android:layout_height="32dp"

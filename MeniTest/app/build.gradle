@@ -1,34 +1,71 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.1"
+    namespace 'com.example.mt.menitest'
+    compileSdkVersion 34
     useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.example.mt.menitest"
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion 21
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.google.android.gms:play-services-vision:11.6.0'
-    testCompile 'junit:junit:4.12'
+    implementation 'androidx.core:core-ktx:1.12.0'
+
+    // Core AndroidX libraries
+    implementation 'androidx.appcompat:appcompat:1.6.1'                 // AppCompatActivity, Toolbar, AlertDialog
+    implementation 'androidx.core:core-ktx:1.12.0'                      // Core Kotlin extensions and ActivityCompat, FileProvider
+    implementation 'androidx.annotation:annotation:1.7.1'               // @NonNull, @Nullable annotations
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'               // Fragment, DialogFragment
+
+    // Material Design Components (replaces support.design.widget)
+    implementation 'com.google.android.material:material:1.11.0'        // FloatingActionButton, Snackbar, TabLayout, NavigationView, AppBarLayout, etc.
+
+    // ConstraintLayout
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'   // ConstraintLayout
+
+    // CoordinatorLayout and DrawerLayout
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0' // CoordinatorLayout
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'           // DrawerLayout
+
+    // ViewPager (for ViewPager widget)
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.google.mlkit:barcode-scanning:17.2.0' // or ML Vision alternative
+
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }

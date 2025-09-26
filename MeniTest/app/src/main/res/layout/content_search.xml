@@ -14,6 +14,6 @@
         android:layout_weight="1"
         android:id="@+id/search_dnevnik"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

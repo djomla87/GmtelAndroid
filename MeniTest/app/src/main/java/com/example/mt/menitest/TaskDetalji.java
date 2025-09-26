@@ -16,11 +16,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -185,18 +186,25 @@ URL = getResources().getString(R.string.ProdukcijaSajt) + "DnevnikPrevoza/Upload
 
 public void  onUtovarAdressClick(View view)
 {
-    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-            Uri.parse("google.navigation:q="+task.getUtovar()));
+    String[] address = task.getUtovar().split("##");
+    if ( address.length > 0 ) {
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("google.navigation:q=" + address[0]));
 
-    startActivity(intent);
+        startActivity(intent);
+    }
+
 }
 
     public void  onIstovarAdressClick(View view)
     {
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-                Uri.parse("google.navigation:q="+task.getIstovar()));
+        String[] address = task.getIstovar().split("##");
+        if ( address.length > 0 ) {
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse("google.navigation:q=" + address[0]));
 
-        startActivity(intent);
+            startActivity(intent);
+        }
     }
 
     public void btnUcitajIzGalerije(View view)
