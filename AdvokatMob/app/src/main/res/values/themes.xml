@@ -1,0 +1,8 @@
+
+<resources>
+
+<style name="Theme.AdvokatMob" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Customize if needed -->
+</style>
+
+</resources>
